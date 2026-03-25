@@ -28,15 +28,22 @@ export default function AddMovie() {
     e.preventDefault();
     setErrorMsg("");
     if (!form.title.trim()) return setErrorMsg("El título es obligatorio.");
-    if (!form.poster.trim())
-      return setErrorMsg("El poster (URL) es obligatorio.");
+    if (!form.poster.trim()) return setErrorMsg("El poster (URL) es obligatorio.");
     if (!form.year) return setErrorMsg("El año es obligatorio.");
+    if (Number(form.year) <= 0) return setErrorMsg("El año debe ser mayor que 0.");
+    if (Number(form.rating) < 0 || Number(form.rating) > 10) {
+      return setErrorMsg("El rating debe estar entre 0 y 10.");
+    }
 
     const payload = {
-      ...form,
+      title: form.title.trim(),
       year: Number(form.year),
       duration: Number(form.duration || 0),
+      genre: form.genre.trim(),
+      studio: form.studio.trim(),
       rating: Number(form.rating || 0),
+      poster: form.poster.trim(),
+      synopsis: form.synopsis.trim(),
     };
 
     try {
@@ -45,9 +52,7 @@ export default function AddMovie() {
       navigate("/movies");
     } catch (err) {
       console.error(err);
-      setErrorMsg(
-        "No se pudo guardar la película. Revisa que JSON Server esté encendido.",
-      );
+      setErrorMsg("No se pudo guardar la película en el backend.");
     } finally {
       setSaving(false);
     }
@@ -84,6 +89,7 @@ export default function AddMovie() {
             label="Año"
             name="year"
             type="number"
+            min="1"
             value={form.year}
             onChange={handleChange}
           />
@@ -91,6 +97,7 @@ export default function AddMovie() {
             label="Duración (min)"
             name="duration"
             type="number"
+            min="0"
             value={form.duration}
             onChange={handleChange}
           />
@@ -119,6 +126,8 @@ export default function AddMovie() {
             name="rating"
             type="number"
             step="0.1"
+            min="0"
+            max="10"
             value={form.rating}
             onChange={handleChange}
           />
@@ -174,6 +183,8 @@ function Field({
   type = "text",
   placeholder = "",
   step,
+  min,
+  max,
 }) {
   return (
     <div className="space-y-1">
@@ -184,6 +195,8 @@ function Field({
         onChange={onChange}
         type={type}
         step={step}
+        min={min}
+        max={max}
         placeholder={placeholder}
         className="w-full rounded-xl border border-white/10 bg-blue-500 px-3 py-2 outline-none focus:border-lime-300"
       />
