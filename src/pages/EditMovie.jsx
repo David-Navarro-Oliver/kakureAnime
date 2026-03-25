@@ -22,9 +22,21 @@ export default function EditMovie() {
   const [errorMsg, setErrorMsg] = useState("");
 
   useEffect(() => {
+    let isMounted = true;
+
     const load = async () => {
+      setLoading(true);
+      setErrorMsg("");
+
       try {
         const movie = await getMovieById(id);
+
+        if (!isMounted) return;
+
+        if (!movie || typeof movie !== "object") {
+          setErrorMsg("No se encontró la película solicitada.");
+          return;
+        }
 
         setForm({
           title: movie.title ?? "",
@@ -38,13 +50,20 @@ export default function EditMovie() {
         });
       } catch (err) {
         console.error(err);
-        setErrorMsg("No se pudo cargar la película.");
+        if (!isMounted) return;
+        setErrorMsg("No se pudo cargar la película desde el backend.");
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
 
     load();
+
+    return () => {
+      isMounted = false;
+    };
   }, [id]);
 
   const handleChange = (e) => {
@@ -57,15 +76,22 @@ export default function EditMovie() {
     setErrorMsg("");
 
     if (!form.title.trim()) return setErrorMsg("El título es obligatorio.");
-    if (!form.poster.trim())
-      return setErrorMsg("El poster (URL) es obligatorio.");
+    if (!form.poster.trim()) return setErrorMsg("El poster (URL) es obligatorio.");
     if (!form.year) return setErrorMsg("El año es obligatorio.");
+    if (Number(form.year) <= 0) return setErrorMsg("El año debe ser mayor que 0.");
+    if (Number(form.rating) < 0 || Number(form.rating) > 10) {
+      return setErrorMsg("El rating debe estar entre 0 y 10.");
+    }
 
     const payload = {
-      ...form,
+      title: form.title.trim(),
       year: Number(form.year),
       duration: Number(form.duration || 0),
+      genre: form.genre.trim(),
+      studio: form.studio.trim(),
       rating: Number(form.rating || 0),
+      poster: form.poster.trim(),
+      synopsis: form.synopsis.trim(),
     };
 
     try {
@@ -74,7 +100,7 @@ export default function EditMovie() {
       navigate("/movies");
     } catch (err) {
       console.error(err);
-      setErrorMsg("No se pudo guardar. ¿Está encendido JSON Server?");
+      setErrorMsg("No se pudo guardar la película en el backend.");
     } finally {
       setSaving(false);
     }
@@ -113,6 +139,7 @@ export default function EditMovie() {
             label="Año"
             name="year"
             type="number"
+            min="1"
             value={form.year}
             onChange={handleChange}
           />
@@ -120,6 +147,7 @@ export default function EditMovie() {
             label="Duración (min)"
             name="duration"
             type="number"
+            min="0"
             value={form.duration}
             onChange={handleChange}
           />
@@ -149,6 +177,8 @@ export default function EditMovie() {
             name="rating"
             type="number"
             step="0.1"
+            min="0"
+            max="10"
             value={form.rating}
             onChange={handleChange}
           />
@@ -203,6 +233,8 @@ function Field({
   type = "text",
   placeholder = "",
   step,
+  min,
+  max,
 }) {
   return (
     <div className="space-y-1">
@@ -213,6 +245,8 @@ function Field({
         onChange={onChange}
         type={type}
         step={step}
+        min={min}
+        max={max}
         placeholder={placeholder}
         className="w-full rounded-xl border border-white/10 bg-zinc-950/60 px-3 py-2 outline-none focus:border-fuchsia-500/40"
       />
