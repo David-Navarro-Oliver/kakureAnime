@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { getAllMovies, deleteMovie } from "../services/moviesApi";
 import MovieCard from "../components/MovieCard";
 
 const LS_KEY = "kakure_movies_filters_v1";
 
 export default function Movies() {
+  const [searchParams] = useSearchParams();
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState("");
@@ -16,19 +18,24 @@ export default function Movies() {
     }
   })();
 
-  const [genre, setGenre] = useState(saved?.genre ?? "ALL");
+  const initialGenre = searchParams.get("genre") || saved?.genre || "ALL";
+  const initialQuery =
+    searchParams.get("query") || searchParams.get("studio") || saved?.query || "";
+
+  const [genre, setGenre] = useState(initialGenre);
   const [year, setYear] = useState(saved?.year ?? "ALL");
-  const [query, setQuery] = useState(saved?.query ?? "");
+  const [query, setQuery] = useState(initialQuery);
 
   const loadMovies = async () => {
+    setLoading(true);
+    setErrorMsg("");
+
     try {
       const data = await getAllMovies();
       setMovies(data);
     } catch (err) {
       console.error(err);
-      setErrorMsg(
-        "No se pudieron cargar las películas. ¿Está encendido JSON Server?",
-      );
+      setErrorMsg("No se pudieron cargar las películas desde el backend.");
     } finally {
       setLoading(false);
     }
@@ -50,7 +57,7 @@ export default function Movies() {
       await loadMovies();
     } catch (err) {
       console.error(err);
-      alert("No se pudo borrar la película.");
+      alert("No se pudo borrar la película en el backend.");
     }
   };
 
