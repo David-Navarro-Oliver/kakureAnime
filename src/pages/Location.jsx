@@ -8,18 +8,18 @@ export default function Location() {
     mensaje: "",
   });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = (event) => {
+    event.preventDefault();
 
     console.log("Form submitted:", formData);
-    alert("¡Mensaje enviado! Nos pondremos en contacto contigo pronto.");
+    alert("Mensaje enviado! Nos pondremos en contacto contigo pronto.");
     setFormData({ nombre: "", email: "", asunto: "", mensaje: "" });
   };
 
-  const handleChange = (e) => {
+  const handleChange = (event) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [event.target.name]: event.target.value,
     });
   };
 
@@ -41,7 +41,7 @@ export default function Location() {
             Contacto
           </h1>
           <p className="mt-3 text-lg text-white/90">
-            ¿Tienes alguna sugerencia o pregunta? Nos encantará escucharte.
+            Tienes alguna sugerencia o pregunta? Nos encantara escucharte.
           </p>
         </div>
       </div>
@@ -55,7 +55,7 @@ export default function Location() {
 
           <div className="relative space-y-6">
             <div>
-              <h2 className="text-3xl font-bold text-gray-900">Envía tu mensaje</h2>
+              <h2 className="text-3xl font-bold text-gray-900">Envia tu mensaje</h2>
               <p className="mt-2 text-gray-800">
                 Completa el formulario y te responderemos lo antes posible.
               </p>
@@ -128,7 +128,7 @@ export default function Location() {
 
               <button
                 type="submit"
-                className="w-full rounded-xl border-2 border-white/40 bg-white px-6 py-3.5 font-bold text-gray-900 shadow-lg transition-all hover:bg-white/95 hover:shadow-xl hover:scale-[1.02] active:scale-[0.98]"
+                className="w-full rounded-xl border-2 border-white/40 bg-white px-6 py-3.5 font-bold text-gray-900 shadow-lg transition-all hover:scale-[1.02] hover:bg-white/95 hover:shadow-xl active:scale-[0.98]"
               >
                 Enviar mensaje
               </button>
@@ -145,7 +145,7 @@ export default function Location() {
           <div className="relative h-full min-h-[500px] lg:min-h-full">
             <div className="absolute inset-0 overflow-hidden rounded-3xl">
               <iframe
-                title="Ubicación Kakure Anime"
+                title="Ubicacion Kakure Anime"
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d50449.57634446334!2d-0.9435468999999999!3d38.08888895!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd63b7613562a515%3A0x40e0c801e0dbe40!2sOrihuela%2C%20Alicante%2C%20Spain!5e0!3m2!1sen!2s!4v1234567890"
                 width="100%"
                 height="100%"
@@ -171,24 +171,24 @@ export default function Location() {
 
         <div className="relative grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           <ContactInfoCard
-            icon="📍"
-            title="Dirección"
-            info={["Calle Anime 123", "03300 Orihuela", "Alicante, España"]}
+            icon="MAP"
+            title="Direccion"
+            info={["Calle Anime 123", "03300 Orihuela", "Alicante, Espana"]}
           />
           <ContactInfoCard
-            icon="📞"
-            title="Teléfono"
+            icon="TEL"
+            title="Telefono"
             info={["+34 965 123 456", "+34 612 345 678"]}
           />
           <ContactInfoCard
-            icon="📧"
+            icon="MAIL"
             title="Correo"
             info={["info@kakureanime.com", "contacto@kakureanime.com"]}
           />
           <ContactInfoCard
-            icon="🕐"
+            icon="TIME"
             title="Horario"
-            info={["Lun - Vie: 9:00 - 18:00", "Sáb: 10:00 - 14:00", "Dom: Cerrado"]}
+            info={["Lun - Vie: 9:00 - 18:00", "Sab: 10:00 - 14:00", "Dom: Cerrado"]}
           />
         </div>
       </div>

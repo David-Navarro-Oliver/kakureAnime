@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { getAllMovies, deleteMovie } from "../services/moviesApi";
 import MovieCard from "../components/MovieCard";
+import { deleteMovie, getAllMovies } from "../services/moviesApi";
 
 const LS_KEY = "kakure_movies_filters_v1";
 
@@ -35,7 +35,7 @@ export default function Movies() {
       setMovies(data);
     } catch (err) {
       console.error(err);
-      setErrorMsg("No se pudieron cargar las películas desde el backend.");
+      setErrorMsg("No se pudieron cargar las peliculas desde el backend.");
     } finally {
       setLoading(false);
     }
@@ -44,12 +44,13 @@ export default function Movies() {
   useEffect(() => {
     loadMovies();
   }, []);
+
   useEffect(() => {
     localStorage.setItem(LS_KEY, JSON.stringify({ genre, year, query }));
   }, [genre, year, query]);
 
   const handleDelete = async (id) => {
-    const ok = confirm("¿Seguro que quieres borrar esta película?");
+    const ok = confirm("Seguro que quieres borrar esta pelicula?");
     if (!ok) return;
 
     try {
@@ -57,33 +58,35 @@ export default function Movies() {
       await loadMovies();
     } catch (err) {
       console.error(err);
-      alert("No se pudo borrar la película en el backend.");
+      alert("No se pudo borrar la pelicula en el backend.");
     }
   };
 
   const genres = useMemo(() => {
-    const g = new Set(movies.map((m) => m.genre).filter(Boolean));
-    return ["ALL", ...Array.from(g).sort()];
+    const values = new Set(movies.map((movie) => movie.genre).filter(Boolean));
+    return ["ALL", ...Array.from(values).sort()];
   }, [movies]);
 
   const years = useMemo(() => {
-    const y = new Set(
-      movies.map((m) => m.year).filter((v) => v !== undefined && v !== null),
+    const values = new Set(
+      movies.map((movie) => movie.year).filter((value) => value !== undefined && value !== null),
     );
-    return ["ALL", ...Array.from(y).sort((a, b) => b - a)];
+    return ["ALL", ...Array.from(values).sort((a, b) => b - a)];
   }, [movies]);
 
   const filtered = useMemo(() => {
     return movies
-      .filter((m) => (genre === "ALL" ? true : m.genre === genre))
-      .filter((m) => (year === "ALL" ? true : String(m.year) === String(year)))
-      .filter((m) => {
+      .filter((movie) => (genre === "ALL" ? true : movie.genre === genre))
+      .filter((movie) => (year === "ALL" ? true : String(movie.year) === String(year)))
+      .filter((movie) => {
         if (!query.trim()) return true;
-        const q = query.toLowerCase();
+
+        const normalizedQuery = query.toLowerCase();
+
         return (
-          (m.title || "").toLowerCase().includes(q) ||
-          (m.studio || "").toLowerCase().includes(q) ||
-          (m.synopsis || "").toLowerCase().includes(q)
+          (movie.title || "").toLowerCase().includes(normalizedQuery) ||
+          (movie.studio || "").toLowerCase().includes(normalizedQuery) ||
+          (movie.synopsis || "").toLowerCase().includes(normalizedQuery)
         );
       });
   }, [movies, genre, year, query]);
@@ -94,7 +97,7 @@ export default function Movies() {
     setQuery("");
   };
 
-  if (loading) return <p className="text-zinc-400">Cargando películas...</p>;
+  if (loading) return <p className="text-zinc-400">Cargando peliculas...</p>;
 
   if (errorMsg) {
     return (
@@ -106,26 +109,18 @@ export default function Movies() {
 
   return (
     <section>
-      {}
       <div className="mb-6 rounded-2xl border border-lime-400/15 bg-blue-400 p-4">
         <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-          {}
           <div>
-            <h2 className="text-5xl font-bold text-lime-300 mb-1">Películas</h2>
+            <h2 className="mb-1 text-5xl font-bold text-lime-300">Peliculas</h2>
             <p className="text-sm text-slate-200/80">
-              Filtra por género/año o busca por título, estudio o sinopsis.
+              Filtra por genero/anio o busca por titulo, estudio o sinopsis.
             </p>
 
             <p className="mt-2 text-xs text-slate-300/60">
               Mostrando{" "}
-              <span className="font-semibold text-amber-50">
-                {filtered.length}
-              </span>{" "}
-              de{" "}
-              <span className="font-semibold text-amber-50">
-                {movies.length}
-              </span>{" "}
-              películas
+              <span className="font-semibold text-amber-50">{filtered.length}</span> de{" "}
+              <span className="font-semibold text-amber-50">{movies.length}</span> peliculas
             </p>
           </div>
 
@@ -134,37 +129,37 @@ export default function Movies() {
               <label className="text-xs text-slate-300/90">Buscar</label>
               <input
                 value={query}
-                onChange={(e) => setQuery(e.target.value)}
+                onChange={(event) => setQuery(event.target.value)}
                 placeholder="Ej: Kimetsu, Ghibli..."
                 className="w-full rounded-xl border border-amber-200/10 bg-slate-900/40 px-3 py-2 text-sm text-slate-100 outline-none placeholder:text-slate-400/60 focus:border-amber-400/40"
               />
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs text-slate-300/90">Género</label>
+              <label className="text-xs text-slate-300/90">Genero</label>
               <select
                 value={genre}
-                onChange={(e) => setGenre(e.target.value)}
+                onChange={(event) => setGenre(event.target.value)}
                 className="w-full rounded-xl border border-amber-200/10 bg-slate-900/40 px-3 py-2 text-sm text-slate-100 outline-none focus:border-amber-400/40"
               >
-                {genres.map((g) => (
-                  <option key={g} value={g}>
-                    {g === "ALL" ? "Todos" : g}
+                {genres.map((value) => (
+                  <option key={value} value={value}>
+                    {value === "ALL" ? "Todos" : value}
                   </option>
                 ))}
               </select>
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs text-slate-300/90">Año</label>
+              <label className="text-xs text-slate-300/90">Anio</label>
               <select
                 value={year}
-                onChange={(e) => setYear(e.target.value)}
+                onChange={(event) => setYear(event.target.value)}
                 className="w-full rounded-xl border border-amber-200/10 bg-slate-900/40 px-3 py-2 text-sm text-slate-100 outline-none focus:border-amber-400/40"
               >
-                {years.map((y) => (
-                  <option key={String(y)} value={y}>
-                    {y === "ALL" ? "Todos" : y}
+                {years.map((value) => (
+                  <option key={String(value)} value={value}>
+                    {value === "ALL" ? "Todos" : value}
                   </option>
                 ))}
               </select>
@@ -181,7 +176,6 @@ export default function Movies() {
         </div>
       </div>
 
-
       {filtered.length === 0 ? (
         <div className="rounded-2xl border border-white/10 bg-white/5 p-6 text-zinc-300">
           No hay resultados con los filtros actuales.
@@ -189,7 +183,7 @@ export default function Movies() {
       ) : (
         <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-6">
           {filtered.map((movie) => (
-            <MovieCard key={movie.id} movie={movie} onDelete={handleDelete} showControls/>
+            <MovieCard key={movie.id} movie={movie} onDelete={handleDelete} showControls />
           ))}
         </div>
       )}

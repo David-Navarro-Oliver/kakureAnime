@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import MovieCard from "./MovieCard";
 import { getAllMovies } from "../services/moviesApi";
 
-
 const Carrousel = ({ genre = "", studio = "", limit = 0, items = "" }) => {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -24,6 +23,7 @@ const Carrousel = ({ genre = "", studio = "", limit = 0, items = "" }) => {
         if (!genre && !studio) {
           data = [...data].sort(() => Math.random() - 0.5);
         }
+
         if (genre) data = data.filter((movie) => movie.genre === genre);
         if (studio) data = data.filter((movie) => movie.studio === studio);
 
@@ -55,61 +55,57 @@ const Carrousel = ({ genre = "", studio = "", limit = 0, items = "" }) => {
   const totalPages = Math.ceil(movies.length / itemsPerPage);
 
   const handleNext = () => {
-    setCurrentIndex((prev) =>
-      prev >= totalPages - 1 ? 0 : prev + 1,
-    );
+    setCurrentIndex((prev) => (prev >= totalPages - 1 ? 0 : prev + 1));
   };
 
   const handlePrev = () => {
-    setCurrentIndex((prev) =>
-      prev === 0 ? totalPages - 1 : prev - 1,
-    );
+    setCurrentIndex((prev) => (prev === 0 ? totalPages - 1 : prev - 1));
   };
 
-  if (loading) return <p className="text-white text-center">Loading...</p>;
-  if (movies.length === 0) return <p className="text-white">No movies found.</p>;
+  if (loading) return <p className="text-center text-white">Cargando...</p>;
+  if (movies.length === 0) return <p className="text-white">No se encontraron peliculas.</p>;
 
   return (
     <section className="w-full space-y-4">
       <div className="flex items-center justify-between px-2">
         <h2 className="text-xl font-semibold text-amber-50">
-          {studio ? `Colección ${studio}` : genre ? `Género: ${genre}` : "Recomendados"}
+          {studio ? `Coleccion ${studio}` : genre ? `Genero: ${genre}` : "Recomendados"}
         </h2>
+
         <div className="flex items-center gap-3">
           <Link
             to={genre ? `/movies?genre=${genre}` : studio ? `/movies?studio=${studio}` : "/movies"}
-            className="text-sm font-medium text-amber-300 hover:text-amber-200 transition-colors"
+            className="text-sm font-medium text-amber-300 transition-colors hover:text-amber-200"
           >
-            Ver más
+            Ver mas
           </Link>
+
           <div className="flex gap-2">
             <button
               onClick={handlePrev}
-              className="rounded-lg border border-amber-200/15 bg-slate-800/50 p-2 text-amber-50 hover:bg-amber-200/10 transition-colors"
+              className="rounded-lg border border-amber-200/15 bg-slate-800/50 p-2 text-amber-50 transition-colors hover:bg-amber-200/10"
             >
-              ❮
+              {"<"}
             </button>
             <button
               onClick={handleNext}
-              className="rounded-lg border border-amber-200/15 bg-slate-800/50 p-2 text-amber-50 hover:bg-amber-200/10 transition-colors"
+              className="rounded-lg border border-amber-200/15 bg-slate-800/50 p-2 text-amber-50 transition-colors hover:bg-amber-200/10"
             >
-              ❯
+              {">"}
             </button>
           </div>
         </div>
       </div>
+
       <div className="relative w-full overflow-hidden rounded-3xl p-4">
         <div
           className="flex transition-transform duration-500 ease-in-out"
           style={{ transform: `translateX(-${currentIndex * 100}%)` }}
         >
           {Array.from({ length: totalPages }).map((_, pageIndex) => (
-            <div key={pageIndex} className="min-w-full flex">
+            <div key={pageIndex} className="flex min-w-full">
               {movies
-                .slice(
-                  pageIndex * itemsPerPage,
-                  pageIndex * itemsPerPage + itemsPerPage,
-                )
+                .slice(pageIndex * itemsPerPage, pageIndex * itemsPerPage + itemsPerPage)
                 .map((movie) => (
                   <div key={movie.id} className="w-full px-2 sm:w-1/2 lg:w-1/3">
                     <MovieCard movie={movie} showControls={false} />
