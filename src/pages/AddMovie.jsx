@@ -19,24 +19,32 @@ export default function AddMovie() {
   const [saving, setSaving] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  const handleChange = (event) => {
+    const { name, value } = event.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     setErrorMsg("");
-    if (!form.title.trim()) return setErrorMsg("El título es obligatorio.");
-    if (!form.poster.trim())
-      return setErrorMsg("El poster (URL) es obligatorio.");
-    if (!form.year) return setErrorMsg("El año es obligatorio.");
+
+    if (!form.title.trim()) return setErrorMsg("El titulo es obligatorio.");
+    if (!form.poster.trim()) return setErrorMsg("El poster (URL) es obligatorio.");
+    if (!form.year) return setErrorMsg("El anio es obligatorio.");
+    if (Number(form.year) <= 0) return setErrorMsg("El anio debe ser mayor que 0.");
+    if (Number(form.rating) < 0 || Number(form.rating) > 10) {
+      return setErrorMsg("El rating debe estar entre 0 y 10.");
+    }
 
     const payload = {
-      ...form,
+      title: form.title.trim(),
       year: Number(form.year),
       duration: Number(form.duration || 0),
+      genre: form.genre.trim(),
+      studio: form.studio.trim(),
       rating: Number(form.rating || 0),
+      poster: form.poster.trim(),
+      synopsis: form.synopsis.trim(),
     };
 
     try {
@@ -45,9 +53,7 @@ export default function AddMovie() {
       navigate("/movies");
     } catch (err) {
       console.error(err);
-      setErrorMsg(
-        "No se pudo guardar la película. Revisa que JSON Server esté encendido.",
-      );
+      setErrorMsg("No se pudo guardar la pelicula en el backend.");
     } finally {
       setSaving(false);
     }
@@ -55,7 +61,6 @@ export default function AddMovie() {
 
   return (
     <section className="max-w-3xl">
-
       {errorMsg && (
         <div className="mb-4 rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-red-200">
           {errorMsg}
@@ -66,36 +71,30 @@ export default function AddMovie() {
         onSubmit={handleSubmit}
         className="space-y-4 rounded-2xl border border-white/10 bg-blue-400 p-6"
       >
-        <h2 className="text-3xl font-bold mb-4 b text-lime-300">Agregar peli</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <h2 className="mb-4 text-3xl font-bold text-lime-300">Agregar pelicula</h2>
+
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <Field label="Titulo" name="title" value={form.title} onChange={handleChange} />
+          <Field label="Estudio" name="studio" value={form.studio} onChange={handleChange} />
           <Field
-            label="Título"
-            name="title"
-            value={form.title}
-            onChange={handleChange}
-          />
-          <Field
-            label="Estudio"
-            name="studio"
-            value={form.studio}
-            onChange={handleChange}
-          />
-          <Field
-            label="Año"
+            label="Anio"
             name="year"
             type="number"
+            min="1"
             value={form.year}
             onChange={handleChange}
           />
           <Field
-            label="Duración (min)"
+            label="Duracion (min)"
             name="duration"
             type="number"
+            min="0"
             value={form.duration}
             onChange={handleChange}
           />
+
           <div className="space-y-1">
-            <label className="text-sm text-zinc-300">Género</label>
+            <label className="text-sm text-zinc-300">Genero</label>
             <select
               name="genre"
               value={form.genre}
@@ -115,10 +114,12 @@ export default function AddMovie() {
           </div>
 
           <Field
-            label="Rating (0–10)"
+            label="Rating (0-10)"
             name="rating"
             type="number"
             step="0.1"
+            min="0"
+            max="10"
             value={form.rating}
             onChange={handleChange}
           />
@@ -139,7 +140,7 @@ export default function AddMovie() {
             value={form.synopsis}
             onChange={handleChange}
             rows={4}
-            className="w-full rounded-xl border border-white/10 bg-blue-500 px-3 py-2 outline-none focus:focus:border-lime-300"
+            className="w-full rounded-xl border border-white/10 bg-blue-500 px-3 py-2 outline-none focus:border-lime-300"
             placeholder="Escribe una sinopsis breve..."
           />
         </div>
@@ -174,6 +175,8 @@ function Field({
   type = "text",
   placeholder = "",
   step,
+  min,
+  max,
 }) {
   return (
     <div className="space-y-1">
@@ -184,6 +187,8 @@ function Field({
         onChange={onChange}
         type={type}
         step={step}
+        min={min}
+        max={max}
         placeholder={placeholder}
         className="w-full rounded-xl border border-white/10 bg-blue-500 px-3 py-2 outline-none focus:border-lime-300"
       />

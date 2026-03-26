@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import Carrousel from "../components/Carrousel";
 
-
 export default function Home() {
   return (
     <section className="space-y-10">
@@ -14,38 +13,38 @@ export default function Home() {
           <div className="space-y-4">
             <p className="inline-flex items-center gap-2 rounded-full border border-amber-200/15 bg-slate-900/20 px-3 py-1 text-xs text-slate-200/80">
               <span className="h-1.5 w-1.5 rounded-full bg-amber-300/70" />
-              Videoclub de anime • Catálogo curado
+              Videoclub de anime | Catalogo curado
             </p>
 
-            <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight text-lime-400">
+            <h1 className="text-4xl font-semibold tracking-tight text-lime-400 sm:text-5xl">
               Kakure Anime
             </h1>
 
             <p className="max-w-prose text-slate-200/80">
-              Descubre películas de anime recomendadas, filtra por género o año
+              Descubre peliculas de anime recomendadas, filtra por genero o anio
               y guarda tus favoritas para volver a ellas cuando quieras.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-3 pt-2">
+            <div className="flex flex-col gap-3 pt-2 sm:flex-row">
               <Link
                 to="/movies"
                 className="inline-flex items-center justify-center rounded-xl border-2 border-lime-400 px-5 py-2.5 text-sm font-semibold text-amber-50 hover:bg-lime-300/40"
               >
-                Explorar catálogo
+                Explorar catalogo
               </Link>
 
               <Link
                 to="/add-movie"
                 className="inline-flex items-center justify-center rounded-xl bg-lime-300 px-5 py-2.5 text-sm font-semibold text-black hover:bg-lime-400"
               >
-                Añadir recomendación
+                Anadir recomendacion
               </Link>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6">
-              <Stat label="Colección" value="Películas" />
-              <Stat label="Filtros" value="Género y año" />
-              <Stat label="Búsqueda" value="Rápida" />
+            <div className="grid grid-cols-2 gap-3 pt-6 sm:grid-cols-4">
+              <Stat label="Coleccion" value="Peliculas" />
+              <Stat label="Filtros" value="Genero y anio" />
+              <Stat label="Busqueda" value="Rapida" />
               <Stat label="Experiencia" value="Premium" />
             </div>
           </div>
@@ -55,8 +54,8 @@ export default function Home() {
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <p className="text-xs text-black">Sugerencia de hoy</p>
-                  <h3 className="mt- text-lg font-semibold text-black">
-                    Encuentra tu próxima película
+                  <h3 className="mt-1 text-lg font-semibold text-black">
+                    Encuentra tu proxima pelicula
                   </h3>
                 </div>
                 <span className="rounded-full border border-amber-200/15 bg-amber-200/10 px-2.5 py-1 text-xs font-semibold text-amber-50">
@@ -65,14 +64,14 @@ export default function Home() {
               </div>
 
               <p className="mt-3 text-sm text-black">
-                Usa los filtros para descubrir joyas de Studio Ghibli, clásicos
-                imprescindibles o películas modernas.
+                Usa los filtros para descubrir joyas de Studio Ghibli, clasicos
+                imprescindibles o peliculas modernas.
               </p>
 
               <div className="mt-5 grid gap-3">
-                <Hint text="Busca por título o por estudio." />
-                <Hint text="Filtra por género y por año." />
-                <Hint text="Guarda tus preferencias para la próxima visita." />
+                <Hint text="Busca por titulo o por estudio." />
+                <Hint text="Filtra por genero y por anio." />
+                <Hint text="Guarda tus preferencias para la proxima visita." />
               </div>
 
               <div className="mt-6">
@@ -80,7 +79,7 @@ export default function Home() {
                   to="/movies"
                   className="inline-flex w-full items-center justify-center rounded-xl border border-amber-200/20 bg-white px-4 py-2.5 text-sm font-semibold text-black hover:bg-lime-200"
                 >
-                  Ir al catálogo
+                  Ir al catalogo
                 </Link>
               </div>
             </div>
@@ -92,19 +91,20 @@ export default function Home() {
 
       <div className="grid gap-4 md:grid-cols-3">
         <Feature
-          title="Catálogo de películas"
-          desc="Una selección de títulos para explorar y comparar."
+          title="Catalogo de peliculas"
+          desc="Una seleccion de titulos para explorar y comparar."
         />
         <Feature
-          title="Filtros y búsqueda"
-          desc="Encuentra rápidamente lo que te apetece ver hoy."
+          title="Filtros y busqueda"
+          desc="Encuentra rapidamente lo que te apetece ver hoy."
         />
         <Feature
-          title="Detalle por película"
-          desc="Información clara para decidir en un vistazo."
+          title="Detalle por pelicula"
+          desc="Informacion clara para decidir en un vistazo."
         />
       </div>
-      <Carrousel items = "6"/>
+
+      <Carrousel items="6" />
     </section>
   );
 }
