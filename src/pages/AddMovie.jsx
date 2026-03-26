@@ -30,8 +30,8 @@ export default function AddMovie() {
 
     if (!form.title.trim()) return setErrorMsg("El titulo es obligatorio.");
     if (!form.poster.trim()) return setErrorMsg("El poster (URL) es obligatorio.");
-    if (!form.year) return setErrorMsg("El anio es obligatorio.");
-    if (Number(form.year) <= 0) return setErrorMsg("El anio debe ser mayor que 0.");
+    if (!form.year) return setErrorMsg("El año es obligatorio.");
+    if (Number(form.year) <= 0) return setErrorMsg("El año debe ser mayor que 0.");
     if (Number(form.rating) < 0 || Number(form.rating) > 10) {
       return setErrorMsg("El rating debe estar entre 0 y 10.");
     }
@@ -77,7 +77,7 @@ export default function AddMovie() {
           <Field label="Titulo" name="title" value={form.title} onChange={handleChange} />
           <Field label="Estudio" name="studio" value={form.studio} onChange={handleChange} />
           <Field
-            label="Anio"
+            label="Año"
             name="year"
             type="number"
             min="1"

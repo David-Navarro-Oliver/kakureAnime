@@ -114,7 +114,7 @@ export default function Movies() {
           <div>
             <h2 className="mb-1 text-5xl font-bold text-lime-300">Peliculas</h2>
             <p className="text-sm text-slate-200/80">
-              Filtra por genero/anio o busca por titulo, estudio o sinopsis.
+              Filtra por genero/año o busca por titulo, estudio o sinopsis.
             </p>
 
             <p className="mt-2 text-xs text-slate-300/60">
@@ -151,7 +151,7 @@ export default function Movies() {
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs text-slate-300/90">Anio</label>
+              <label className="text-xs text-slate-300/90">Año</label>
               <select
                 value={year}
                 onChange={(event) => setYear(event.target.value)}

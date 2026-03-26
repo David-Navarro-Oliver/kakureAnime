@@ -21,7 +21,7 @@ export default function Home() {
             </h1>
 
             <p className="max-w-prose text-slate-200/80">
-              Descubre peliculas de anime recomendadas, filtra por genero o anio
+              Descubre peliculas de anime recomendadas, filtra por genero o año
               y guarda tus favoritas para volver a ellas cuando quieras.
             </p>
 
@@ -43,7 +43,7 @@ export default function Home() {
 
             <div className="grid grid-cols-2 gap-3 pt-6 sm:grid-cols-4">
               <Stat label="Coleccion" value="Peliculas" />
-              <Stat label="Filtros" value="Genero y anio" />
+              <Stat label="Filtros" value="Genero y año" />
               <Stat label="Busqueda" value="Rapida" />
               <Stat label="Experiencia" value="Premium" />
             </div>
@@ -70,7 +70,7 @@ export default function Home() {
 
               <div className="mt-5 grid gap-3">
                 <Hint text="Busca por titulo o por estudio." />
-                <Hint text="Filtra por genero y por anio." />
+                <Hint text="Filtra por genero y por año." />
                 <Hint text="Guarda tus preferencias para la proxima visita." />
               </div>
 
