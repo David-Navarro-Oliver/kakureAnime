@@ -141,6 +141,13 @@ Requisitos:
 - npm
 - Backend Spring Boot ejecutandose en `http://localhost:8080` o en la URL indicada por `VITE_API_URL`
 
+Clonado del repositorio:
+
+```bash
+git clone https://github.com/David-Navarro-Oliver/kakureAnime.git
+cd kakureAnime
+```
+
 Instalacion:
 
 ```bash
